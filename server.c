@@ -4,11 +4,14 @@
 
 void sig_handler(int signum, siginfo_t *info, void *context)
 {
+	static int count = 0;
+	static char c;
+
 	if (signum == SIGUSR1)
-		ft_printf("0 ");
+		write(1, "0", 1);
 	else if (signum == SIGUSR2)
-		ft_printf("1 ");
-	ft_printf("Received from %d\n", info -> si_pid);
+		write(1, "1", 1);
+	count++;
 	kill(info -> si_pid, SIGUSR1);
 }
 
