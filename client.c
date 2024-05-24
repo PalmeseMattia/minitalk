@@ -1,12 +1,6 @@
 #include <signal.h>
 #include "libft/libft.h"
 
-/*
- * This function sends character through UNIX signals.
- * After sending a SIGUSR based on the bit to send, the
- * client will wait for an ack from the server.
- * The sleep will prevent busy waiting.
- */
 volatile sig_atomic_t ack_received = 0;
 
 void ack_handler(int signum)
@@ -14,6 +8,12 @@ void ack_handler(int signum)
 	ack_received = 1;
 }
 
+/*
+ * This function sends characters through UNIX signals.
+ * After sending a SIGUSR based on the bit to send, the
+ * client will wait for an ack from the server.
+ * The sleep will prevent busy waiting.
+ */
 void send_char(char c, int pid)
 {
 	int bit;
@@ -30,7 +30,7 @@ void send_char(char c, int pid)
 			kill(pid, SIGUSR2);
 		i--;
 		while(!ack_received)
-			usleep(100);
+			usleep(500);
 	}
 }
 
@@ -41,11 +41,19 @@ int	main(int argc, char *argv[])
 
 	if (argc != 3)
 	{
-		ft_printf("Usage: %s <pid> <message>\n", argv[0]);
+		ft_printf("Usage: <PID> <MESSAGE>\n");
 		exit(EXIT_FAILURE);
 	}
-	pid = atoi(argv[1]);
+	if (!ft_strisnum((const char *)argv[1]))
+		exit(EXIT_FAILURE);
+	pid = ft_atoi(argv[1]);
+	if (pid < 0)
+	{
+		ft_printf("PID is less than 0!\n");
+		exit(EXIT_FAILURE);
+	}
 	message = argv[2];
+	signal(SIGUSR1, ack_handler);
 	while (*message)
 	{
 		send_char(*message, pid);

@@ -4,14 +4,20 @@
 
 void sig_handler(int signum, siginfo_t *info, void *context)
 {
-	static int count = 0;
-	static char c;
+	static int	i = 0;
+	static char	c = 0;
 
 	if (signum == SIGUSR1)
-		write(1, "0", 1);
+		c = c << 1;
 	else if (signum == SIGUSR2)
-		write(1, "1", 1);
-	count++;
+		c = (c << 1) | 1;
+	i++;
+	if (i == 8)
+	{
+		write(1, &c, 1);
+		i = 0;
+		c = 0;
+	}
 	kill(info -> si_pid, SIGUSR1);
 }
 

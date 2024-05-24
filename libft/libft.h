@@ -6,7 +6,7 @@
 /*   By: dpalmese <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 12:05:09 by dpalmese          #+#    #+#             */
-/*   Updated: 2024/02/13 12:12:29 by dpalmese         ###   ########.fr       */
+/*   Updated: 2024/05/24 19:33:36 by rizz             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LIBFT_H
@@ -86,4 +86,6 @@ size_t				ft_putnstr_fd(char *s, int len, int fd);
 int					ft_putpointer_fd(void *p, int fd);
 int					ft_putnbrbase_fd(long number, int base, int fd,
 						int capital);
+int					ft_strisnum(const char *s);
+
 #endif
