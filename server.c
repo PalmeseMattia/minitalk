@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpalmese <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/24 21:50:55 by dpalmese          #+#    #+#             */
+/*   Updated: 2024/05/24 21:51:52 by dpalmese         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include <signal.h>
 #include <unistd.h>
 #include "libft/libft.h"
 
-void sig_handler(int signum, siginfo_t *info, void *context)
+void	sig_handler(int signum, siginfo_t *info, void *context)
 {
 	static int	i = 0;
 	static char	c = 0;
@@ -21,9 +32,9 @@ void sig_handler(int signum, siginfo_t *info, void *context)
 	kill(info -> si_pid, SIGUSR1);
 }
 
-int main()
+int	main(void)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
 
 	sa.sa_sigaction = sig_handler;
 	sa.sa_flags = SA_SIGINFO;
@@ -31,7 +42,7 @@ int main()
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
 	ft_printf("Server Running...\nPID: %d\n", getpid());
-	while(1)
+	while (1)
 	{
 		pause();
 	}

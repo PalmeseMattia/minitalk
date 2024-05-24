@@ -1,11 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpalmese <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/24 21:48:26 by dpalmese          #+#    #+#             */
+/*   Updated: 2024/05/24 21:50:36 by dpalmese         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include <signal.h>
 #include "libft/libft.h"
 
-volatile sig_atomic_t ack_received = 0;
+volatile sig_atomic_t	g_ack_received = 0;
 
-void ack_handler(int signum)
+void	ack_handler(int signum)
 {
-	ack_received = 1;
+	g_ack_received = 1;
 }
 
 /*
@@ -14,22 +25,22 @@ void ack_handler(int signum)
  * client will wait for an ack from the server.
  * The sleep will prevent busy waiting.
  */
-void send_char(char c, int pid)
+void	send_char(char c, int pid)
 {
-	int bit;
-	int i;
+	int	bit;
+	int	i;
 
 	i = 7;
 	while (i >= 0)
 	{
-		ack_received = 0;
+		g_ack_received = 0;
 		bit = (c >> i) & 1;
 		if (bit == 0)
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
 		i--;
-		while(!ack_received)
+		while (!g_ack_received)
 			usleep(500);
 	}
 }
@@ -58,7 +69,7 @@ int	main(int argc, char *argv[])
 	{
 		send_char(*message, pid);
 		message++;
-    }
+	}
 	ft_printf("Done\n");
-    return (0);
+	return (0);
 }
